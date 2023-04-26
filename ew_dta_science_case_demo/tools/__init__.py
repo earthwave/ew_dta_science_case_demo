@@ -1,1 +1,1 @@
-from .dataset_loader import DatasetLoader
+from .dataset_loader import OpenScienceDataset

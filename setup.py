@@ -25,6 +25,7 @@ setup(
         'ipykernel',
         'jupyterlab-git',
         'numpy>1.15',
+        'netCDF4',
         'matplotlib',
         'tifffile'
     ],
