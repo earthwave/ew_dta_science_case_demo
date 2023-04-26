@@ -26,7 +26,6 @@ setup(
         'jupyterlab-git',
         'numpy>1.15',
         'matplotlib',
-        'testbook',
         'tifffile'
     ],
 )
