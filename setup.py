@@ -1,6 +1,4 @@
 """Setup file for ew_dta_open_science."""
-import os
-
 from setuptools import find_packages
 from setuptools import setup
 
