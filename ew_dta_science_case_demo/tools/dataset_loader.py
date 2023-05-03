@@ -82,10 +82,10 @@ class OpenScienceDataset():
                 data_u.append(tifffile.imread(os.path.join(self.base_dir, self.dataset_name, f'u10_{date.strftime(format="%m_%Y")}.tiff')))
                 data_v.append(tifffile.imread(os.path.join(self.base_dir, self.dataset_name, f'v10_{date.strftime(format="%m_%Y")}.tiff')))
 
-            data = np.stack([np.stack(data_u), np.stack(data_v)])
+            data = np.stack([np.stack(data_u), np.stack(data_v)], axis = 1)
 
             info = f'Monthly data between {dates[0].strftime(format="%Y-%m-%d")} and {dates[-1].strftime(format="%Y-%m-%d")} with dimension \n' \
-                    '(Direction (U/V), Time, X, Y)'
+                    '(Time, Direction (U/V), X, Y)'
 
         if self.dataset_name == 'ice_flow':
             tifs_for_dataset = os.listdir(os.path.join(self.base_dir, self.dataset_name))
@@ -136,16 +136,24 @@ class OpenScienceDataset():
 
         min_x_index, max_x_index, min_y_index, max_y_index = OpenScienceDataset._extent_to_common_grid_indices(extent)
         min_t_index, max_t_index =  self._min_t_max_t_to_date_indices(min_t, max_t)
-        data_to_plot = self.data[max_t_index][max_y_index:min_y_index, min_x_index:max_x_index] - \
-                       self.data[min_t_index][max_y_index:min_y_index, min_x_index:max_x_index]
         
-        if self.dataset_name == 'grounding_line_migration_rates':
+        if self.dataset_name == '10m_wind_speed':
+            # we caclulate magnitude then find difference between start and end times
+            magnitudes = (self.data[min_t_index:max_t_index, 0, max_y_index:min_y_index, min_x_index:max_x_index]**2
+                            + self.data[min_t_index:max_t_index, 1, max_y_index:min_y_index, min_x_index:max_x_index]**2)**0.5
+            data_to_plot = magnitudes[-1] - magnitudes[0]
+
+        elif self.dataset_name == 'grounding_line_migration_rates':
             data_to_plot = self.data[max_t_index][max_y_index:min_y_index, min_x_index:max_x_index]
+        
+        else:
+            data_to_plot = self.data[max_t_index][max_y_index:min_y_index, min_x_index:max_x_index] - \
+                self.data[min_t_index][max_y_index:min_y_index, min_x_index:max_x_index]
 
         time_delta_plot = \
             ax.imshow(data_to_plot, cmap=colourmap, alpha=transparency, interpolation='nearest', extent=extent)
         
-        cbar = plt.colorbar(time_delta_plot, shrink=0.4, location='right', pad=0.1)
+        cbar = plt.colorbar(time_delta_plot, shrink=0.6, location='right', pad=0.01)
 
         return time_delta_plot, cbar.set_label(f'{self.dataset_name} ({self.units})')
 
