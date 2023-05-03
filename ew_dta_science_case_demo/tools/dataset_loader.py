@@ -132,7 +132,7 @@ class OpenScienceDataset():
 
         return data, dates, info
 
-    def plot2d(self, ax, extent, min_t, max_t, colourmap='viridis', transparency=1):
+    def plot2d(self, ax, extent, min_t, max_t, colourmap='viridis', transparency=1, vmin=None, vmax=None):
 
         min_x_index, max_x_index, min_y_index, max_y_index = OpenScienceDataset._extent_to_common_grid_indices(extent)
         min_t_index, max_t_index =  self._min_t_max_t_to_date_indices(min_t, max_t)
@@ -151,7 +151,13 @@ class OpenScienceDataset():
                 self.data[min_t_index][max_y_index:min_y_index, min_x_index:max_x_index]
 
         time_delta_plot = \
-            ax.imshow(data_to_plot, cmap=colourmap, alpha=transparency, interpolation='nearest', extent=extent)
+            ax.imshow(data_to_plot,
+                      cmap=colourmap,
+                      alpha=transparency,
+                      extent=extent,
+                      vmin=vmin,
+                      vmax=vmax,
+                      interpolation='nearest')
         
         cbar = plt.colorbar(time_delta_plot, shrink=0.6, location='right', pad=0.01)
 
