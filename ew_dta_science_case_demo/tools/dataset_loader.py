@@ -1,4 +1,5 @@
-"""A module to load and plot datasets on the /dtadata drive."""
+"""A module to simulate the loading of data via a homogeneous data lake. This example loads and plot datasets 
+from the /dtadata network file store, performing necessary transformations."""
 from __future__ import annotations
 from datetime import datetime
 from datetime import timedelta
