@@ -145,9 +145,9 @@ class OpenScienceDataset():
         time_delta_plot = \
             ax.imshow(data_to_plot, cmap=colourmap, alpha=transparency, interpolation='nearest', extent=extent)
         
-        cbar = plt.colorbar(time_delta_plot, shrink=0.5)
+        cbar = plt.colorbar(time_delta_plot, shrink=0.4, location='right', pad=0.1)
 
-        return time_delta_plot, cbar.set_label(self.dataset_name)
+        return time_delta_plot, cbar.set_label(f'{self.dataset_name} ({self.units})')
 
     def plot_time_series(self, ax, extent, min_t, max_t):
 
